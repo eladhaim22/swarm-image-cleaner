@@ -6,17 +6,18 @@
   "scripts": {
     "buildDev": "rm -rf dist && webpack --mode development --config webpack.server.config.js",
     "buildProd": "rm -rf dist && webpack --mode production --config webpack.server.config.js",
-    "start":"node -r dotenv/config ./dist/server.js",
+    "start": "node -r dotenv/config ./dist/server.js",
     "start-docker": "node ./server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.19.2",
+    "dockerode": "^3.2.0",
     "express": "^4.17.1",
-    "jsonwebtoken": "^8.5.1",
-    "node-cron": "^2.0.3"
+    "net": "^1.0.2",
+    "node-cron": "^2.0.3",
+    "uuid": "^8.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
