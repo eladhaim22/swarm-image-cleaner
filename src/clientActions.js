@@ -17,9 +17,9 @@ async function lookupPromise(domain){
 };
 
 export const setClients = async () => {
-  let hosts = DOCKER_API_ADDRESS.split(',');
-  if(hosts.length = 1){
-    hosts = await lookupPromise(host[0]);
+  let hosts = process.env.DOCKER_API_ADDRESS.split(',');
+  if(hosts.length = 1 && !net.isIP(hosts[0])){
+    hosts = await lookupPromise(hosts[0]);
   }
   clients = hosts.map((host) => 
     ({
@@ -50,12 +50,16 @@ export const deleteImage = async (image) => {
   const imageDigest = image.RepoDigests && image.RepoDigests.length > 0 ? image.RepoDigests[0] : 'unknown'
   const imageName = imageDigest.split('@')[0];
   const imageSha = imageDigest.split('@').length > 1 ? imageDigest.split('@')[1] : '';
-  await clients.find(x => x.id ===  image.ClientId).dockerClient.getImage(image.Id).remove({force: true},(error, result) => {
-    if(error){
-      throw error;
-    }
-    console.log(`The image: ${imageName}${imageSha && ' ' + imageSha} deleted`);
-  });
+  
+  return new Promise((resolve,reject) => 
+    clients.find(x => x.id ===  image.ClientId).dockerClient.getImage(image.Id).remove({force: true},(error, result) => {
+      if(error){
+        reject(error);
+      }
+      console.log(`The image: ${imageName}${imageSha && ' ' + imageSha} deleted`);
+      resolve();
+    })
+  );
 }
 
 const addClientIdToPromiseResult = (clientId, func) => {
