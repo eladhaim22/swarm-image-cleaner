@@ -1,4 +1,5 @@
 FROM node:lts-alpine3.9 as build
+COPY qemu-arm-static /usr/bin/
 
 WORKDIR /build
 COPY . /build/
